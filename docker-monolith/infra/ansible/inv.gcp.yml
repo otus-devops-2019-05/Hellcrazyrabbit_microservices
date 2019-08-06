@@ -4,8 +4,7 @@
   zones:
     - "us-central1-a"
   groups:
-    appserver: "'app' in name"
-    dbserver: "'db' in name"
+    docker-ready: "'docker-ready' in name"
   hostnames:
     - name
   filters: []

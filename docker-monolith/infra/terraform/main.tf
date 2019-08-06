@@ -1,10 +1,9 @@
-
 terraform {
   required_version = ">=0.11,<12"
 }
 
 provider "google" {
-  version     = "2.0.0"
+  version = "2.0.0"
   project = "${var.project}"
   region  = "${var.region}"
 }
@@ -26,14 +25,16 @@ resource "google_compute_instance" "app" {
   metadata {
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
+
   boot_disk {
     initialize_params {
       image = "${var.disk_image}"
     }
   }
+
   network_interface {
-    network = "default"
-    access_config {}
+    network       = "default"
+    access_config = {}
   }
 }
 

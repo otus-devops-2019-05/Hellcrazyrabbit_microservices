@@ -1,0 +1,11 @@
+- name: Deploy reddit from docker
+  hosts: docker_ready
+  tasks:
+    - name: Start reddit docker container
+      docker_container:
+        name: reddit
+        image: hellcrazyrabbit/otus-reddit:1.0
+        published_ports: 9292:9292
+        auto_remove: yes
+        state: started
+        detach: yes
