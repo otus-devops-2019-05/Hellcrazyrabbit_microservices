@@ -1,0 +1,12 @@
+{
+	"proj_id":"your project",
+	"image_family":"reddit-docker",
+	"src_image":"ubuntu-1604-lts",
+	"acc_file":"credentials file",
+        "machine":"f1-micro",
+	"image_description":"OTUS DevOps Docker training image",
+        "disk_size":"10",
+        "disk_type":"pd-ssd",
+        "network":"default",
+        "tags":"puma-server",
+}
