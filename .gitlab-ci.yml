@@ -50,7 +50,7 @@ production:
   stage: production
   when: manual
   script:
-    - echo: 'Deploy'
+    - echo 'Deploy'
   environment:
     name: production
     url: https://example.com
