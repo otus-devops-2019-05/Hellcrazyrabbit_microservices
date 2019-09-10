@@ -49,15 +49,15 @@ staging:
     url: https://beta.example.com
 
 branch review:
- stage: review
- script: echo "Deploy to $CI_ENVIRONMENT_SLUG"
- environment:
- name: branch/$CI_COMMIT_REF_NAME
- url: http://$CI_ENVIRONMENT_SLUG.example.com
- only:
- - branches
- except:
- - master
+  stage: review
+  script: echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+  only:
+    - branches
+  except:
+    - master
 
 production:
   stage: production
