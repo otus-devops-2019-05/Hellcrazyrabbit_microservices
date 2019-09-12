@@ -1,7 +1,0 @@
-REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
-hellworks/ubuntu-tmp-file   latest              b6b05606380c        5 minutes ago       120MB
-ubuntu                      16.04               5e13f8dd4c1a        12 days ago         120MB
-hello-world                 latest              fce289e99eb9        7 months ago        1.84kB
-
-Контейнер хранит полную информацию конфигурации оборудования и запущенных процессов, когда как образ(image) описывает только общие значения.
-Контейнер запускается на основе образа.
