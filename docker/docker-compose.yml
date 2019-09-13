@@ -15,11 +15,13 @@ services:
       - '${PORTS}/tcp'
     networks:
       - frontnet
+
   post:
     image: ${USER_NAME}/post:${POST_VER}
     networks:
       - backnet
       - frontnet
+  
   comment:
     image: ${USER_NAME}/comment:${COMMENT_VER}
     networks:
