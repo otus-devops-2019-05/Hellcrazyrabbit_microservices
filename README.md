@@ -75,7 +75,7 @@
 https://cloud.docker.com/u/hellcrazyrabbit/repository/list
  - Самостоятельно проверены различные датчики prometheus
 
-#Создание и запуск системы мониторинга Prometheus
+# Создание и запуск системы мониторинга Prometheus
 
  - [x] Мониторинг Docker контейнеров
  - [x] Визуализация метрик
