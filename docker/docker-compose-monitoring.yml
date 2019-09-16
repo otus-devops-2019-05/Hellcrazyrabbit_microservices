@@ -15,6 +15,16 @@ services:
     networks:
       - backnet
       - frontnet
+      - monitoring
+
+  alertmanager:
+    image: ${USER_NAME}/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+    ports:
+      - 9093:9093
+    networks:
+      - monitoring
 
   node-exporter:
     image: prom/node-exporter:v0.15.2
@@ -28,7 +38,7 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
     networks:
-      - backnet
+      - monitoring
 
   cadvisor:
     image: google/cadvisor:v0.29.0
@@ -40,7 +50,7 @@ services:
     ports:
       - '8080:8080'
     networks:
-      - backnet
+      - monitoring
 
   grafana:
     image: grafana/grafana:5.0.0
@@ -54,12 +64,16 @@ services:
     ports:
       - '3000:3000'
     networks:
-      - backnet
+      - monitoring
 
 volumes:
   grafana_data:
   prometheus_data:
 
 networks:
+  monitoring:
+    driver: bridge
   backnet:
+    driver: bridge
   frontnet:
+    driver: bridge
