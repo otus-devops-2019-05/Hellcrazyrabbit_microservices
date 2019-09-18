@@ -1,5 +1,12 @@
 version: '3.3'
 services:
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - backnet
+      - frontnet
   fluentd:
     image: ${USER_NAME}/fluentd
     ports:
@@ -33,4 +40,6 @@ services:
 
 networks:
   backnet:
+    driver: bridge
+  frontnet:
     driver: bridge
