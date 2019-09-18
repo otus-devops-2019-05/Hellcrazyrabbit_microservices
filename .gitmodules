@@ -1,0 +1,3 @@
+[submodule "src/logging"]
+	path = src/logging
+	url = https://github.com/express42/reddit.git
