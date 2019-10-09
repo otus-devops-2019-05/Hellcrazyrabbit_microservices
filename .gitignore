@@ -25,4 +25,7 @@ vault.key
 .cache
 .pytest_cache
 .env
-
+# Serts
+.crt
+.key
+.cer
