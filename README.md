@@ -120,4 +120,33 @@ https://cloud.docker.com/u/hellcrazyrabbit/repository/list
 Сервис на адресе http://104.197.242.113:9292
 Zipkin http://104.197.242.113:9411
 `````
- 
+
+# Kubernetes.Запуск кластера и приложения. Модель безопасности.
+ - [x] Развернуть локальное окружение для работы с Kubernetes 
+ - [x] Развернуть Kubernetes в GKE 
+ - [x] Запустить reddit в Kubernetes
+
+## Описание
+ - Созданы все деплои, сервисы для k8s и наймспейс dev
+ - В minikube version: v1.4.0 для активации аддона dashboard выполняем 
+`````
+minikube addons enable dashboard
+`````
+Для перехода в на страницу - minikube dashboard
+ - Развернут кластер GKE для проверки работы приложения можно перейти по адресу 
+http://35.202.115.7:30320/
+
+# Kubernetes. Networks,  Storages
+ - [x] Ingress Controller  
+ - [x] Ingress. Secret. TLS  
+ - [x] LoadBalancer Service 
+ - [x] Network Policies 
+ - [x] PersistentVolumes
+ - [x] PersistentVolumeClaims
+
+##Задание *
+Описан манифест по добавлению TLS  объекта secret.yml
+
+## Описание
+ - Произведена установка и настройка всех объектов 
+ - Дополнительно изучена возможность автодобавления TLS  по примеру https://mcs.mail.ru/help/settings-containers/letsencrypt
