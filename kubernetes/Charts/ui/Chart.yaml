@@ -2,7 +2,7 @@ name: ui
 version: 1.0.0
 description: OTUS reddit application UI
 maintainers:
-  - name: Someone
+  - name: SDV
     email: my@mail.com
 appVersion: 1.0
 
