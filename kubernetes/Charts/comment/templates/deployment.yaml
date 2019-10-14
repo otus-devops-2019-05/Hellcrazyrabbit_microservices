@@ -30,5 +30,5 @@ spec:
           name: comment
           protocol: TCP
         env:
-        - name: COMMENT_DATABASE_HOST
-          value: {{ .Values.databaseHost | default (printf "%s-mongodb" .Release.Name) }}
+          - name: COMMENT_DATABASE_HOST
+            value: {{ .Values.databaseHost | default (printf "%s-mongodb" .Release.Name) }}
