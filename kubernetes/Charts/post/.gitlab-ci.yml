@@ -1,4 +1,3 @@
-
 ---
 image: alpine:latest
 
@@ -61,6 +60,7 @@ release:
     CI_APPLICATION_TAG: $CI_COMMIT_REF_SLUG
     CI_CONTAINER_NAME: ci_job_build_${CI_JOB_ID}
   before_script:
+    - apk add -U openssl curl
     - >
       if ! docker info &>/dev/null; then
         if [ -z "$DOCKER_HOST" -a "$KUBERNETES_PORT" ]; then
@@ -68,7 +68,6 @@ release:
         fi
       fi
   script:
-    # Releasing
     - echo "Updating docker images ..."
     - >
       if [[ -n "$CI_REGISTRY_USER" ]]; then
@@ -109,19 +108,17 @@ review:
     - apk add glibc-2.23-r3.apk
     - curl https://storage.googleapis.com/pub/gsutil.tar.gz | tar -xz -C $HOME
     - export PATH=${PATH}:$HOME/gsutil
-    - curl -L https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz | tar zx
+    - curl -L https://get.helm.sh/helm-v3.0.0-beta.3-linux-amd64.tar.gz | tar -zvx
     - mv linux-amd64/helm /usr/bin/
-    - helm init --client-only
-    - helm version --client
-    - helm plugin install https://github.com/rimusz/helm-tiller
+    - helm version
     - curl  -o /usr/bin/sync-repo.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/sync-repo.sh
     - chmod a+x /usr/bin/sync-repo.sh
     - curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     - chmod +x /usr/bin/kubectl
     - kubectl version --client
     - kubectl describe namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
+    # installing Tiller
     - echo "Checking Tiller..."
-    - helm init --client-only
     - kubectl rollout status -n "$TILLER_NAMESPACE" -w "deployment/tiller-deploy"
     - >
       if ! helm version --debug; then
@@ -137,12 +134,13 @@ review:
     - echo "Clone deploy repository..."
     - git clone http://gitlab-gitlab/$CI_PROJECT_NAMESPACE/reddit-deploy.git
     - echo "Download helm dependencies..."
+    - helm repo add mongodb https://kubernetes-charts.storage.googleapis.com
     - helm dep update reddit-deploy/reddit
     - echo "Deploy helm release $name to $KUBE_NAMESPACE"
     - echo "Upgrading existing release..."
-    - echo "helm tiller run -- helm upgrade --install --wait --set ui.ingress.host="$host" --set $CI_PROJECT_NAME.image.tag="$CI_APPLICATION_TAG" --namespace="$KUBE_NAMESPACE" --version="$CI_PIPELINE_ID-$CI_JOB_ID" "$name" reddit-deploy/reddit/"
+    - echo "helm upgrade --install --wait --set ui.ingress.host="$host" --set $CI_PROJECT_NAME.image.tag="$CI_APPLICATION_TAG" --namespace="$KUBE_NAMESPACE" --version="$CI_PIPELINE_ID-$CI_JOB_ID" "$name" reddit-deploy/reddit/"
     - >
-      helm tiller run -- helm upgrade \
+      helm upgrade \
         --install \
         --wait \
         --set ui.ingress.host="$host" \
@@ -151,11 +149,11 @@ review:
         --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
         "$name" \
         reddit-deploy/reddit/
-
 stop_review:
   stage: cleanup
   variables:
     GIT_STRATEGY: none
+    KUBE_NAMESPACE: review
     name: $CI_ENVIRONMENT_SLUG
   environment:
     name: review/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME
@@ -176,13 +174,11 @@ stop_review:
     - apk add glibc-2.23-r3.apk
     - curl https://storage.googleapis.com/pub/gsutil.tar.gz | tar -xz -C $HOME
     - export PATH=${PATH}:$HOME/gsutil
-    - curl https://kubernetes-helm.storage.googleapis.com/helm-v2.13.1-linux-amd64.tar.gz | tar zx
+    - curl https://get.helm.sh/helm-v3.0.0-beta.3-linux-amd64.tar.gz | tar zx
     - mv linux-amd64/helm /usr/bin/
-    - helm version --client
-    - curl  -o /usr/bin/sync-repo.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/sync-repo.sh
-    - chmod a+x /usr/bin/sync-repo.sh
+    - helm version
     - curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     - chmod +x /usr/bin/kubectl
     - kubectl version --client
   script:
-    - helm delete "$name" --purge
+    - helm delete "$name" --purge --n review
